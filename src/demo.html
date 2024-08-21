@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PiGraph - parser demo - Dev page</title>
+
+    <!-- adding vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- KaTex -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
+        integrity="sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC" crossorigin="anonymous">
+
+    <!-- The loading of KaTeX is deferred to speed up page rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"
+        integrity="sha384-X/XCfMm41VSsqRNQgDerQczD69XqmjOOOwYQvr/uuC+j4OPoNhVgjdGFwhvN02Ja"
+        crossorigin="anonymous"></script>
+
+    <!-- adding app.css  -->
+    <link rel="stylesheet" href="app.css" />
+</head>
+
+<body class="min-h-screen">
+    <div id="app">
+        <h1 class="text-center text-2xl font-semibold my-10">Graph builder</h1>
+        <!-- output -->
+        <div id="root" class="w-full max-w-3xl mx-auto border p-3 shadow aspect-square"></div>
+
+        <div>
+            <button class="border rounded-full shadow hover:bg-gray-200 transition-all px-5 py-2"
+                @click="toggle('axis')">toggle
+                axis</button>
+            <button class="border rounded-full shadow hover:bg-gray-200 transition-all px-5 py-2"
+                @click="toggle('grid')">toggle
+                grid</button>
+        </div>
+    </div>
+</body>
+
+<script type="module" defer src="/src/demo.ts"> </script>
+
+</html>
