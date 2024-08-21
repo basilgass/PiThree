@@ -1,3 +1,5 @@
+import { PARSER_VALUES } from "piparser/lib/PiParserTypes"
+import { AbstractFigure } from "./figures/AbstractFigure"
 
 export interface XYZ { x: number, y: number, z: number }
 
@@ -23,4 +25,10 @@ export interface IParserSettings {
     axis?: boolean,
     label?: boolean,
     tex?: boolean
+}
+
+export type IParserValues = PARSER_VALUES | AbstractFigure
+export interface IParserParameters {
+    value: IParserValues,
+    options: IParserValues[]
 }

@@ -6,12 +6,11 @@ import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import { AbstractFigure, IFigureAppearance } from "./AbstractFigure"
 
 export interface IArcConfig {
-    mark: boolean
     radius: number | THREE.Vector3,
     start: THREE.Vector3, // A: XYZ
     center: THREE.Vector3,
     end: THREE.Vector3, // B: XYZ
-    invert?: boolean,
+    mark?: boolean
     appearance?: IFigureAppearance
     arrow?: {
         width: number,
@@ -21,9 +20,9 @@ export interface IArcConfig {
 }
 export class Arc extends AbstractFigure {
     #config: IArcConfig
-    #arrow: THREE.Mesh
     #AB: THREE.Vector3
     #AC: THREE.Vector3
+    #arrow: THREE.Mesh | undefined
     #line: Line2
     #curve: THREE.EllipseCurve
 
@@ -32,7 +31,6 @@ export class Arc extends AbstractFigure {
 
         this.#config = Object.assign({}, config)
 
-        console.log(this.#config)
         this.#AB = this.#config.start.clone().sub(this.#config.center)
         this.#AC = this.#config.end.clone().sub(this.#config.center)
 
@@ -78,6 +76,14 @@ export class Arc extends AbstractFigure {
 
         if (isNaN(this.#config.radius) || this.#config.radius <= 0) { return 1 }
         return this.#config.radius
+    }
+
+    get line(): Line2 {
+        return this.#line
+    }
+
+    get arrow(): THREE.Mesh | undefined {
+        return this.#arrow
     }
 
     #makeShape() {
@@ -151,6 +157,8 @@ export class Arc extends AbstractFigure {
         )
 
         this.mesh.add(this.#arrow)
+
+        this.#arrow.visible = this.#config.mark === true
     }
 
     computed(): void {
@@ -169,5 +177,8 @@ export class Arc extends AbstractFigure {
         this.mesh.localToWorld(start)
 
         this.mesh.rotateZ(this.AB.angleTo(start.clone().sub(this.center)))
+
+        // Compute the line distance
+        this.line.computeLineDistances()
     }
 }

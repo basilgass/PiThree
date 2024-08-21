@@ -66,6 +66,10 @@ export class Line extends AbstractFigure {
         return this.#config
     }
 
+    get line(): Line2 {
+        return this.mesh as Line2
+    }
+
     #makeShape() {
 
         // Create a "fat" line
@@ -172,6 +176,9 @@ export class Line extends AbstractFigure {
 
 
         // Update the mesh geometry
-        (this.mesh.geometry as LineGeometry).setPositions([P1.x, P1.y, P1.z, P2.x, P2.y, P2.z])
+        this.line.geometry.setPositions([P1.x, P1.y, P1.z, P2.x, P2.y, P2.z])
+
+        // Compute the line distance
+        this.line.computeLineDistances()
     }
 }

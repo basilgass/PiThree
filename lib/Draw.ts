@@ -1,7 +1,7 @@
 import { Graph } from "./Graph"
 import { PiParse } from "piparser/lib/PiParse"
-import type { PARSER } from "piparser/lib/PiParserTypes"
-import { IParserConfig } from "./pithree.types"
+import type { DOMAIN, PARSER } from "piparser/lib/PiParserTypes"
+import { IParserConfig, IParserParameters } from "./pithree.types"
 import { Point } from "./figures/Point"
 import { parser_config } from "./parser/parser.config"
 import { AbstractFigure } from "./figures/AbstractFigure"
@@ -17,7 +17,8 @@ export class Draw extends Graph {
         grid: boolean,
         axis: boolean,
         label: boolean,
-        tex: boolean
+        tex: boolean,
+        'no-points': boolean
     }
     #parser: PiParse
 
@@ -57,11 +58,10 @@ export class Draw extends Graph {
     }
 
     public refreshLayout(parameters?: string): this {
+        // TODO: reformat this!
         const values = this.#parser.parameters(parameters ?? '', PARSER_PARAMETERS_KEYS)
         // this.updateLayout()
 
-        console.log(values)
-        console.log(values.grid, values.axis)
         if (values.grid) {
             this.#settings.grid = values.grid.value as boolean
         } else {
@@ -78,9 +78,18 @@ export class Draw extends Graph {
 
         if (values.label) {
             this.#settings.label = values.label.value as boolean
+        } else {
+            this.#settings.label = false
         }
         if (values.tex) {
             this.#settings.tex = values.tex.value as boolean
+        } else {
+            this.#settings.tex = false
+        }
+        if (values['no-points']) {
+            this.#settings['no-points'] = values['no-points'].value as boolean
+        } else {
+            this.#settings['no-points'] = false
         }
         return this
     }
@@ -141,25 +150,114 @@ export class Draw extends Graph {
                     if (config) {
                         obj = objCreate(config, item.name)
                     }
-                    return
                 }
-            }
-
-            if (!obj) {
-                console.log('UNKNOWN OBJECT', item)
             }
 
             // The object has been created - apply some specific settings
             if (obj) {
-                // TODO: apply some specific settings
-                if (item.parameters) {
-                    console.log(item.parameters)
+                // Default settings
+                if (this.#settings.label) {
+                    // Add the label
+                } else if (this.#settings.tex) {
+                    // Add the tex label
                 }
 
+                if (obj instanceof Point && this.#settings['no-points']) {
+                    item.parameters['!'] = { value: true, options: [] }
+                }
+
+                this.#applyOptions(item.parameters, obj)
+
+            } else {
+                console.log('No object created')
+                console.log(item)
             }
         })
 
         return this
+    }
+
+    #applyOptions(options: Record<string, IParserParameters>, obj: AbstractFigure) {
+        Object.keys(options).forEach((key) => {
+            switch (key) {
+                case 'w':
+                    obj.lineWidth(options[key].value as number)
+                    break
+                case 'ultrathin':
+                    obj.lineWidth(0.5)
+                    break
+                case 'thin':
+                    obj.lineWidth(0.75)
+                    break
+                case 'thick':
+                    obj.lineWidth(2.5)
+                    break
+                case 'ultrathick':
+                    obj.lineWidth(4)
+                    break
+                case 'color':
+                    obj.color(options[key].value as string)
+                    break
+                case 'fill':
+                    obj.fill(
+                        options[key].value as string,
+                        options[key].options[0] as number
+                    )
+                    break
+                case 'dash':
+                    if (options[key].value === true) {
+                        obj.dash(true)
+                    } else {
+                        obj.dash(options[key].value as number)
+                    }
+                    break
+                case 'dot':
+                    obj.dot()
+                    break
+                case 'mark':
+                    obj.mark()
+                    break
+
+                // Visibility
+                case 'hide':
+                case '!':
+                    obj.hide()
+                    break
+                // case '?':
+                //     obj.label?.hide()
+                //     break
+
+                // Placement
+                // case 'move':
+                //     obj.move(options[key].value as XY)
+                //     break
+
+                // Label and text
+                // case 'label':
+                // case 'tex':
+                //     obj.addLabel(
+                //         options[key].value === true ? obj.name : options[key].value as string,
+                //         key === 'tex',
+                //         this.toTex
+                //     )
+
+                //     if (obj.label) {
+                //         const alignement = options[key].options[0] === false ? 'br' : options[key].options[0] as LABEL_POSITION
+                //         const offsetAsUnits = options[key].options[1] as XY | undefined ?? { x: 0, y: 0 }
+                //         const offset = {
+                //             x: offsetAsUnits.x * this.config.axis.x.x,
+                //             y: -offsetAsUnits.y * this.config.axis.y.y
+                //         }
+
+                //         obj.label.position(
+                //             alignement,
+                //             offset
+                //         )
+                //     }
+                // 
+                // break
+            }
+        })
     }
 
     #parseKeyCode(key_code: string): string {

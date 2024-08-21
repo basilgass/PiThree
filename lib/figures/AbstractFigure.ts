@@ -1,10 +1,11 @@
 import * as THREE from 'three'
+import { Line2, LineMaterial } from 'three/examples/jsm/Addons.js'
 
 export interface IFigureAppearance {
     opacity: number,
     color: string,
     width?: number,
-    dashed?: boolean | { dashSize: number, gapSize: number }
+    dashed?: boolean | number
     borderColor?: string,
 
 }
@@ -12,7 +13,6 @@ export interface IFigureAppearance {
 export abstract class AbstractFigure {
     #scene: THREE.Scene
     #name: string
-    #color = 'black'
     #mesh: THREE.Mesh | THREE.Group
     #label: unknown
     #appearance: IFigureAppearance
@@ -45,24 +45,23 @@ export abstract class AbstractFigure {
     set appearance(appearance: IFigureAppearance) {
         this.#appearance = appearance
     }
-
-    get color() {
-        return this.#color
-    }
-    set color(color: string) {
-        this.#color = color
-    }
     get mesh() {
         return this.#mesh
     }
     set mesh(mesh: THREE.Mesh | THREE.Group) {
         this.#mesh = mesh
     }
+    get line(): Line2 | undefined {
+        return undefined
+    }
     get label() {
         return this.#label
     }
     set label(label: unknown) {
         this.#label = label
+    }
+    get arrow(): THREE.Mesh | undefined {
+        return undefined
     }
 
     abstract computed(): void
@@ -75,6 +74,79 @@ export abstract class AbstractFigure {
         // TODO: Implement update label
         // this.updateLabel()
 
+        return this
+    }
+
+    color(color: string): this {
+        this.#mesh.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                const material = child.material as THREE.MeshBasicMaterial
+                material.color.set(color)
+            }
+        })
+
+        return this
+    }
+    dash(dash: boolean | number): this {
+        this.#mesh.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                if (this.line === undefined) { return }
+                const material = child.material as LineMaterial
+                material.dashed = dash ? true : false
+
+                if (typeof dash !== 'boolean') {
+                    material.dashScale = dash
+                }
+
+                // Compute the line length
+                this.line.computeLineDistances()
+            }
+        })
+        return this
+    }
+
+    dot(): this {
+        return this.dash(10)
+    }
+
+    mark(): this {
+        if (this.line === undefined) { return this }
+
+        if (this.arrow === undefined) { return this }
+
+        this.arrow.visible = true
+
+        return this
+    }
+
+    lineWidth(width: number): this {
+        this.#mesh.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                if (this.line === undefined) { return }
+
+                const material = child.material as LineMaterial
+                material.linewidth = width
+            }
+        })
+        return this
+    }
+
+    fill(color: string, opacity?: number): this {
+
+        if (opacity === undefined) { opacity = this.#appearance.opacity }
+
+        this.#mesh.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                const material = child.material as THREE.MeshBasicMaterial
+                material.color.set(color)
+                material.opacity = opacity
+            }
+        })
+        return this
+    }
+
+    hide(): this {
+        this.#mesh.visible = false
         return this
     }
 }

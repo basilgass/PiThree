@@ -15,9 +15,10 @@ createApp({
         const code = ref(`A(5,2,1)
 B(-1,-3,6)
 C(-2,3,-2)
-d1=AB.
-d2=AC.
-a=arc B,A,C`)
+d1=AB.->dash
+d2=AC.->dash
+a=arc B,A,C
+p=plane A,B,C->fill=red/0.1`)
 
         return {
             parameters,
@@ -34,6 +35,7 @@ a=arc B,A,C`)
             },
             refreshLayout: () => {
                 draw.refreshLayout(parameters.value)
+                draw.refresh(code.value)
             }
         }
     }

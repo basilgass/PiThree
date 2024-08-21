@@ -85,7 +85,6 @@ export class Plane extends AbstractFigure {
         const plane = new THREE.Plane()
         const position = new THREE.Vector3()
 
-        console.log(this.#config)
         if (this.#config.equation) {
             // It's an equation of the plane: ax+by+cz+d=0
             // a, b, c, d : number | "numerator/denominator"
