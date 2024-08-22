@@ -15,10 +15,7 @@ export interface IPlaneConfig {
         C: THREE.Vector3
     },
     fromLine?: {
-        line: {
-            A: THREE.Vector3,
-            direction: THREE.Vector3
-        },
+        line: THREE.Vector3
         point: THREE.Vector3,
     },
     equation?: string,
@@ -99,6 +96,7 @@ export class Plane extends AbstractFigure {
             // 2. split the right side by '+' or "-"
             // 3. foreach element and assign to a, b, c, d
             const [left] = this.#config.equation.split('=')
+
             const items = left.split(/(?=[+|-])/)
             let a = 0, b = 0, c = 0, d = 0
             items.forEach(item => {
@@ -118,11 +116,18 @@ export class Plane extends AbstractFigure {
                     d = Number(item)
                 }
             })
-            console.log(a, b, c, d)
-            const normal = new THREE.Vector3(a, b, c)
-            this.#plane.setFromNormalAndCoplanarPoint(normal, new THREE.Vector3(0, 0, -d / c))
-            position.set(0, 0, -d / c)
+            let origin = new THREE.Vector3(0, 0, 0)
+            if (c !== 0) {
+                origin.z = - d / c
+            } else if (b !== 0) {
+                origin.y = - d / b
+            } else if (a !== 0) {
+                origin.x = - d / a
+            }
 
+            const normal = new THREE.Vector3(a, b, c).normalize()
+            this.#plane.setFromNormalAndCoplanarPoint(normal, origin)
+            position.set(origin.x, origin.y, origin.z)
 
         } else if (this.#config.through?.A && this.#config.through.B && this.#config.through.C) {
             // It's a three points
@@ -137,9 +142,12 @@ export class Plane extends AbstractFigure {
                 (pt1.z + pt2.z + pt3.z) / 3,
             )
         } else if (this.#config.fromLine?.line && this.#config.fromLine.point) {
-            const A = new THREE.Vector3(this.#config.fromLine.line.A.x, this.#config.fromLine.line.A.y, this.#config.fromLine.line.A.z)
-            const direction = new THREE.Vector3(this.#config.fromLine.line.direction.x, this.#config.fromLine.line.direction.y, this.#config.fromLine.line.direction.z)
+            const A = this.#config.fromLine.point.clone()
+            const direction = this.#config.fromLine.line.clone()
+            // const A = new THREE.Vector3(this.#config.fromLine.line.A.x, this.#config.fromLine.line.A.y, this.#config.fromLine.line.A.z)
+            // const direction = new THREE.Vector3(this.#config.fromLine.line.direction.x, this.#config.fromLine.line.direction.y, this.#config.fromLine.line.direction.z)
 
+            console.log(A, direction);
             const line = new THREE.Line3(
                 A,
                 A.clone().add(direction)

@@ -15,7 +15,7 @@
     "url": "git+https://github.com/basilgass/PiThree.git"
   },
   "dependencies": {
-    "piparser": "^0.0.11",
+    "piparser": "^0.0.12",
     "three": "^0.167.1"
   },
   "devDependencies": {

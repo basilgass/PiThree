@@ -137,12 +137,10 @@ export class Draw extends Graph {
         const graphCreate = this.create
 
         this.#code.forEach((item) => {
-
             item.name = this.#uniqueName(item.name)
-
             let obj: AbstractFigure | undefined
-            if (Object.hasOwn(pConfig, item.key)) {
 
+            if (Object.hasOwn(pConfig, item.key)) {
                 const { build, create } = pConfig[item.key]
 
                 if (Object.hasOwn(graphCreate, create)) {
@@ -277,7 +275,8 @@ export class Draw extends Graph {
 
         // Extract the line (with = sign). The id is before the '=' and the code is after '='
         // This is a special version (no spaces) and should be checked first
-        if (key_code.includes('=') && !key_code.includes(' ')) {
+        if (/^[a-z][0-9]*=[v]?[A-Z][0-9]*[A-Z][0-9]*[.\[]?/.exec(key_code)) {
+            // if (key_code.includes('=') && !key_code.includes(' ')) {
             return this.#parseKeyCodeLine(key_code)
         }
 

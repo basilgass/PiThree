@@ -13,10 +13,7 @@ export interface IPlaneConfig {
         C: THREE.Vector3;
     };
     fromLine?: {
-        line: {
-            A: THREE.Vector3;
-            direction: THREE.Vector3;
-        };
+        line: THREE.Vector3;
         point: THREE.Vector3;
     };
     equation?: string;
