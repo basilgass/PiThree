@@ -70,6 +70,10 @@ export class Line extends AbstractFigure {
         return this.mesh as Line2
     }
 
+    get math(): THREE.Line3 {
+        return new THREE.Line3(this.A, this.B)
+    }
+
     #makeShape() {
 
         // Create a "fat" line

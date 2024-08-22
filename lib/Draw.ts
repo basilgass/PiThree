@@ -1,6 +1,6 @@
 import { Graph } from "./Graph"
 import { PiParse } from "piparser/lib/PiParse"
-import type { DOMAIN, PARSER } from "piparser/lib/PiParserTypes"
+import type { PARSER } from "piparser/lib/PiParserTypes"
 import { IParserConfig, IParserParameters } from "./pithree.types"
 import { Point } from "./figures/Point"
 import { parser_config } from "./parser/parser.config"
@@ -25,7 +25,8 @@ export class Draw extends Graph {
     constructor(id: string | HTMLElement, config?: IParserConfig) {
         super(id, {
             grid: false,
-            axis: false
+            axis: false,
+            converter: config?.converter
         })
 
         this.#parser = new PiParse({
@@ -42,7 +43,8 @@ export class Draw extends Graph {
             grid: false,
             axis: false,
             label: false,
-            tex: false
+            tex: false,
+            'no-points': false
         }
 
         // Build the layout using the default values or the parameters
@@ -233,29 +235,30 @@ export class Draw extends Graph {
                 //     break
 
                 // Label and text
-                // case 'label':
-                // case 'tex':
-                //     obj.addLabel(
-                //         options[key].value === true ? obj.name : options[key].value as string,
-                //         key === 'tex',
-                //         this.toTex
-                //     )
+                case 'label':
+                case 'tex':
+                    obj.addLabel(
+                        options[key].value === true ? obj.name : options[key].value as string,
+                        key === 'tex',
+                        (str: string) => this.converter(str)
+                    )
+                    // TODO: handle label / tex placement
 
-                //     if (obj.label) {
-                //         const alignement = options[key].options[0] === false ? 'br' : options[key].options[0] as LABEL_POSITION
-                //         const offsetAsUnits = options[key].options[1] as XY | undefined ?? { x: 0, y: 0 }
-                //         const offset = {
-                //             x: offsetAsUnits.x * this.config.axis.x.x,
-                //             y: -offsetAsUnits.y * this.config.axis.y.y
-                //         }
+                    // if (obj.label) {
+                    //     const alignement = options[key].options[0] === false ? 'br' : options[key].options[0] as LABEL_POSITION
+                    //     const offsetAsUnits = options[key].options[1] as XY | undefined ?? { x: 0, y: 0 }
+                    //     const offset = {
+                    //         x: offsetAsUnits.x * this.config.axis.x.x,
+                    //         y: -offsetAsUnits.y * this.config.axis.y.y
+                    //     }
 
-                //         obj.label.position(
-                //             alignement,
-                //             offset
-                //         )
-                //     }
-                // 
-                // break
+                    //     obj.label.position(
+                    //         alignement,
+                    //         offset
+                    //     )
+                    // }
+
+                    break
             }
         })
     }

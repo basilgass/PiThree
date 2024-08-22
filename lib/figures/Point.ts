@@ -1,8 +1,11 @@
 import * as THREE from 'three'
 import { AbstractFigure } from './AbstractFigure'
+import { Line } from './Line'
+import { Plane } from './Plane'
 
 export interface IPointConfig {
-    coordinates: { x: number, y: number, z: number },
+    coordinates?: { x: number, y: number, z: number },
+    projection?: { object: THREE.Vector3, target: unknown },
     color?: string,
     size?: number
 }
@@ -68,6 +71,26 @@ export class Point extends AbstractFigure {
             this.#x = this.config.coordinates.x
             this.#y = this.config.coordinates.y
             this.#z = this.config.coordinates.z
+        } else if (this.config.projection) {
+            const { object, target } = this.config.projection
+
+            console.log(object, target)
+            const T = new THREE.Vector3()
+            if (object instanceof Point && target instanceof Line) {
+                // Projection of a point on a line
+                const A = object.v3
+                target.math.closestPointToPoint(A, false, T)
+            }
+
+            if (object instanceof Point && target instanceof Plane) {
+                const plane = target.math
+                plane.projectPoint(object.v3, T)
+            }
+
+            this.#x = T.x
+            this.#y = T.y
+            this.#z = T.z
+
         }
 
         this.mesh.position.set(this.#x, this.#y, this.#z)

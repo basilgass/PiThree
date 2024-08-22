@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 import { Line2, LineMaterial } from 'three/examples/jsm/Addons.js'
+import { Label } from './Label'
+import { TeXConverterType } from '../pithree.types'
 
 export interface IFigureAppearance {
     opacity: number,
@@ -7,14 +9,13 @@ export interface IFigureAppearance {
     width?: number,
     dashed?: boolean | number
     borderColor?: string,
-
 }
 
 export abstract class AbstractFigure {
     #scene: THREE.Scene
     #name: string
     #mesh: THREE.Mesh | THREE.Group
-    #label: unknown
+    #label: Label | undefined
     #appearance: IFigureAppearance
 
     constructor(scene: THREE.Scene, name: string) {
@@ -51,17 +52,15 @@ export abstract class AbstractFigure {
     set mesh(mesh: THREE.Mesh | THREE.Group) {
         this.#mesh = mesh
     }
+
     get line(): Line2 | undefined {
+        return undefined
+    }
+    get arrow(): THREE.Mesh | undefined {
         return undefined
     }
     get label() {
         return this.#label
-    }
-    set label(label: unknown) {
-        this.#label = label
-    }
-    get arrow(): THREE.Mesh | undefined {
-        return undefined
     }
 
     abstract computed(): void
@@ -142,6 +141,20 @@ export abstract class AbstractFigure {
                 material.opacity = opacity
             }
         })
+        return this
+    }
+
+    addLabel(label: string, asTeX: boolean, converter: TeXConverterType): this {
+        if (this.#label === undefined) {
+            this.#label = new Label(this, {
+                content: label,
+                asTeX: asTeX,
+                converter
+            })
+        } else {
+            this.#label.update(label, asTeX)
+        }
+
         return this
     }
 

@@ -3,7 +3,7 @@ import { CSS2DRenderer, OrbitControls } from 'three/examples/jsm/Addons.js'
 import { IPointConfig, Point } from './figures/Point'
 import { ILineConfig, Line } from './figures/Line'
 import { IPlaneConfig, Plane } from './figures/Plane'
-import { IGraphConfig, IGraphConstructorConfig } from './pithree.types'
+import { IGraphConfig, IGraphConstructorConfig, TeXConverterType } from './pithree.types'
 import { AbstractFigure } from './figures/AbstractFigure'
 import { Arc, IArcConfig } from './figures/Arc'
 
@@ -19,6 +19,7 @@ export class Graph {
     #camera: THREE.PerspectiveCamera
     #scene: THREE.Scene
     #figures: Record<string, AbstractFigure>
+    #converter: TeXConverterType
 
     constructor(id: string | HTMLElement, config?: IGraphConstructorConfig) {
 
@@ -43,6 +44,12 @@ export class Graph {
         this.#config = Object.assign({
             backgroundColor: '#ffffff'
         }, config)
+
+        if (config?.converter) {
+            this.#converter = config.converter
+        } else {
+            this.#converter = (str: string) => str
+        }
 
         // Create canvas and initialize:
         // 1. Create renderer, css2renderer, camera, scene, controls
@@ -78,6 +85,10 @@ export class Graph {
     }
     get scene() {
         return this.#scene
+    }
+
+    get converter() {
+        return this.#converter
     }
 
     #createCanvas() {
@@ -274,6 +285,11 @@ export class Graph {
 
     public clear() {
         Object.keys(this.figures).forEach((name) => {
+            // Remove the label if there is one.
+            if (this.figures[name].label) {
+                this.figures[name].mesh.remove(this.figures[name].label.mesh)
+            }
+
             // Remove the mesh from the scene.
             this.scene.remove(this.figures[name].mesh)
         })

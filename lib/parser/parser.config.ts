@@ -23,6 +23,14 @@ export const parser_config: Record<string, parser_item> = {
         build: buildPoint,
         create: 'point'
     },
+    proj: {
+        name: 'projection',
+        description: 'Create a projection of a point on a line / plane',
+        code: 'proj A,d | proj d,p',
+        parameters: [],
+        build: buildPoint,
+        create: 'point'
+    },
     line: {
         name: 'line',
         description: 'Create a line',

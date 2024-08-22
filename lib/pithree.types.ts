@@ -7,7 +7,7 @@ export interface IGraphConstructorConfig {
     backgroundColor?: string;
     grid?: boolean,
     axis?: boolean,
-    tex?: TeXConverterType
+    converter?: TeXConverterType
 }
 export interface IGraphConfig {
     backgroundColor: string,
@@ -16,7 +16,7 @@ export interface IGraphConfig {
 export interface IParserConfig {
     parameters?: string,
     code?: string
-    tex?: TeXConverterType,
+    converter?: TeXConverterType,
 }
 export type TeXConverterType = (value: string) => string
 

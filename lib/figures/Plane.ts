@@ -28,11 +28,14 @@ export interface IPlaneConfig {
 export class Plane extends AbstractFigure {
     #shape: IPlaneShape
     #config: IPlaneConfig
+    #plane: THREE.Plane
     constructor(scene: THREE.Scene, name: string, config: IPlaneConfig) {
         super(scene, name)
 
         // Global config file
         this.#config = config
+
+        this.#plane = new THREE.Plane()
 
         // Shape of the plane with default values
         this.#shape = Object.assign({
@@ -67,6 +70,10 @@ export class Plane extends AbstractFigure {
         this.#shape.height = height
     }
 
+    get math(): THREE.Plane {
+        return this.#plane
+    }
+
     #makeMesh(): void {
         const geom = new THREE.PlaneGeometry(this.width, this.height)
         const material = new THREE.MeshBasicMaterial({
@@ -82,7 +89,6 @@ export class Plane extends AbstractFigure {
         this.computed()
     }
     computed(): void {
-        const plane = new THREE.Plane()
         const position = new THREE.Vector3()
 
         if (this.#config.equation) {
@@ -114,7 +120,7 @@ export class Plane extends AbstractFigure {
             })
             console.log(a, b, c, d)
             const normal = new THREE.Vector3(a, b, c)
-            plane.setFromNormalAndCoplanarPoint(normal, new THREE.Vector3(0, 0, -d / c))
+            this.#plane.setFromNormalAndCoplanarPoint(normal, new THREE.Vector3(0, 0, -d / c))
             position.set(0, 0, -d / c)
 
 
@@ -123,7 +129,7 @@ export class Plane extends AbstractFigure {
             const pt1 = new THREE.Vector3(this.#config.through.A.x, this.#config.through.A.y, this.#config.through.A.z)
             const pt2 = new THREE.Vector3(this.#config.through.B.x, this.#config.through.B.y, this.#config.through.B.z)
             const pt3 = new THREE.Vector3(this.#config.through.C.x, this.#config.through.C.y, this.#config.through.C.z)
-            plane.setFromCoplanarPoints(pt1, pt2, pt3)
+            this.#plane.setFromCoplanarPoints(pt1, pt2, pt3)
 
             position.set(
                 (pt1.x + pt2.x + pt3.x) / 3,
@@ -141,7 +147,7 @@ export class Plane extends AbstractFigure {
 
             const normal = new THREE.Vector3()
             line.delta(normal).normalize()
-            plane.setFromNormalAndCoplanarPoint(
+            this.#plane.setFromNormalAndCoplanarPoint(
                 normal,
                 new THREE.Vector3(this.#config.fromLine.point.x, this.#config.fromLine.point.y, this.#config.fromLine.point.z)
             )
@@ -153,7 +159,7 @@ export class Plane extends AbstractFigure {
         }
 
         this.mesh.position.set(position.x, position.y, position.z)
-        this.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), plane.normal)
+        this.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), this.#plane.normal)
         if (this.#shape.rotate > 0) { this.mesh.rotateZ(this.#shape.rotate * Math.PI / 180) }
     }
 }
