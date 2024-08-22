@@ -1,5 +1,5 @@
-import { PARSER_VALUES } from "piparser/lib/PiParserTypes"
-import { AbstractFigure } from "./figures/AbstractFigure"
+import type { PARSER_VALUES } from "piparser/lib/PiParserTypes"
+import type { AbstractFigure } from "./figures/AbstractFigure"
 
 export interface XYZ { x: number, y: number, z: number }
 

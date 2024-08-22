@@ -1,6 +1,6 @@
 import * as THREE from "three"
 import { CSS2DObject } from "three/examples/jsm/Addons.js"
-import { AbstractFigure } from "./AbstractFigure"
+import type { AbstractFigure } from "./AbstractFigure"
 import { TeXConverterType } from "../pithree.types"
 
 
