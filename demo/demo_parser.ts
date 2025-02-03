@@ -13,17 +13,20 @@ createApp({
     },
     setup() {
         const parameters = ref('axis,grid')
-        const code = ref(`A(7,2,1)
-B(-1,-3,6)
-C(-2,3,-2)
-d1=AB.->dash
-d2=AC.->dash
-a=arc B,A,C
-p=plane A,B,C->fill=red/0.1
-D(3,8,7)
-P1=proj D,d2->color=blue
-P2=proj D,p->color=red
-`)
+//         const code = ref(`A(7,2,1)
+// B(-1,-3,6)
+// C(-2,3,-2)
+// d1=AB.->dash
+// d2=AC.->dash
+// a=arc B,A,C
+// p=plane A,B,C->fill=red/0.1
+// D(3,8,7)
+// P1=proj D,d2->color=blue
+// P2=proj D,p->color=red
+// `)
+
+       const  code = ref(`A(7,2,1)
+s=sphere A,3,14,24`)
 
         return {
             parameters,

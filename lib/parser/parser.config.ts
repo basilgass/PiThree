@@ -4,6 +4,7 @@ import { buildPoint } from "./buildPoint"
 import { buildLine } from "./buildLine"
 import { buildPlane } from "./buildPlane"
 import { buildArc } from "./buildArc"
+import {buildSphere} from "./buildSphere.ts";
 
 interface parser_item {
     name: string
@@ -78,5 +79,13 @@ export const parser_config: Record<string, parser_item> = {
         parameters: [],
         build: buildArc,
         create: 'arc'
+    },
+    sphere: {
+        name: 'sphere',
+        description: 'Create a sphere',
+        code: 's=sphere A,#[,#,#]',
+        parameters: [],
+        build: buildSphere,
+        create: 'sphere'
     }
 }

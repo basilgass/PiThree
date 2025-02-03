@@ -147,7 +147,6 @@ export class Plane extends AbstractFigure {
             // const A = new THREE.Vector3(this.#config.fromLine.line.A.x, this.#config.fromLine.line.A.y, this.#config.fromLine.line.A.z)
             // const direction = new THREE.Vector3(this.#config.fromLine.line.direction.x, this.#config.fromLine.line.direction.y, this.#config.fromLine.line.direction.z)
 
-            console.log(A, direction);
             const line = new THREE.Line3(
                 A,
                 A.clone().add(direction)

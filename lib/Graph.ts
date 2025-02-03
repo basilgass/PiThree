@@ -6,6 +6,7 @@ import { IPlaneConfig, Plane } from './figures/Plane'
 import { IGraphConfig, IGraphConstructorConfig, TeXConverterType } from './pithree.types'
 import { AbstractFigure } from './figures/AbstractFigure'
 import { Arc, IArcConfig } from './figures/Arc'
+import {ISphereConfig, Sphere} from "./figures/Sphere.ts";
 
 type createConfig = (config: any, name: string) => AbstractFigure
 
@@ -198,6 +199,11 @@ export class Graph {
                 const arc = new Arc(this.#scene, name, config)
                 this.figures[name] = arc
                 return arc
+            },
+            sphere: (config: ISphereConfig, name: string)=> {
+                const sphere = new Sphere(this.#scene, name, config)
+                this.figures[name] = sphere
+                return sphere
             }
         }
     }

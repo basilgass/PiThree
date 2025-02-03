@@ -46,7 +46,7 @@ export abstract class AbstractFigure {
     set appearance(appearance: IFigureAppearance) {
         this.#appearance = appearance
     }
-    get mesh() {
+    get mesh(): THREE.Mesh | THREE.Group {
         return this.#mesh
     }
     set mesh(mesh: THREE.Mesh | THREE.Group) {
@@ -141,6 +141,17 @@ export abstract class AbstractFigure {
                 material.opacity = opacity
             }
         })
+        return this
+    }
+
+    wire(enable: boolean): this {
+        this.#mesh.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                const material = child.material as THREE.MeshBasicMaterial
+                material.wireframe = enable === undefined ? !material.wireframe : enable
+            }
+        })
+
         return this
     }
 

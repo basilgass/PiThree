@@ -204,6 +204,9 @@ export class Draw extends Graph {
                         options[key].options[0] as number
                     )
                     break
+                case 'wire':
+                    obj.wire(true)
+                    break;
                 case 'dash':
                     if (options[key].value === true) {
                         obj.dash(true)
