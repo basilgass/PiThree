@@ -31,6 +31,7 @@ export declare abstract class AbstractFigure {
     mark(): this;
     lineWidth(width: number): this;
     fill(color: string, opacity?: number): this;
+    wire(enable: boolean): this;
     addLabel(label: string, asTeX: boolean, converter: TeXConverterType): this;
     hide(): this;
 }

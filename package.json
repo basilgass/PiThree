@@ -16,24 +16,24 @@
   },
   "dependencies": {
     "piparser": "^0.0.12",
-    "three": "^0.167.1"
+    "three": "^0.173.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.9.0",
+    "@eslint/js": "^9.19.0",
     "@types/eslint__js": "^8.42.3",
-    "@types/three": "^0.167.1",
+    "@types/three": "^0.173.0",
     "autoprefixer": "^10.4.20",
-    "dependency-cruiser": "^16.4.0",
-    "eslint": "^9.9.0",
-    "globals": "^15.9.0",
-    "postcss": "^8.4.41",
-    "tailwindcss": "^3.4.10",
-    "ts-loader": "^9.5.1",
+    "dependency-cruiser": "^16.9.0",
+    "eslint": "^9.19.0",
+    "globals": "^15.14.0",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17",
+    "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4",
-    "typescript-eslint": "^8.1.0",
-    "vite": "^5.4.1",
-    "vite-plugin-dts": "^4.0.3",
-    "vitest": "^2.0.5"
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.22.0",
+    "vite": "^6.0.11",
+    "vite-plugin-dts": "^4.5.0",
+    "vitest": "^3.0.4"
   }
 }
