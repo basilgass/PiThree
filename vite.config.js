@@ -23,6 +23,7 @@ export default defineConfig({
 				filePath: filePath.replace("index.d.ts", "pithree.d.ts"),
 				content,
 			}),
+			include: ["src/**/*.ts"],
 			outDir: "types"
 		}), // generate .d.ts files for the lib folder
 	],

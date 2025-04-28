@@ -4,10 +4,10 @@
   "type": "module",
   "main": "dist/pithree.js",
   "module": "dist/pithree.js",
-  "types": "dist/pithree.d.ts",
+  "types": "types/pithree.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./types/index.d.ts",
       "import": "./dist/pithree.js",
       "require": "./dist/pithree.js"
     }
