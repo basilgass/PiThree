@@ -9,7 +9,7 @@ export default defineConfig({
 		outDir: "dist",
 		copyPublicDir: false,
 		lib: {
-			entry: resolve(__dirname, "lib/index.ts"),
+			entry: resolve(__dirname, "src/index.ts"),
 			name: "PiThree",
 			formats: ["es"],
 			fileName: "pithree"
@@ -23,7 +23,7 @@ export default defineConfig({
 				filePath: filePath.replace("index.d.ts", "pithree.d.ts"),
 				content,
 			}),
-			include: ['lib', "es2022"]
+			outDir: "types"
 		}), // generate .d.ts files for the lib folder
 	],
 	rollupOptions: {
