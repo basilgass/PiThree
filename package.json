@@ -1,6 +1,6 @@
 {
   "name": "pithree",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "type": "module",
   "main": "dist/pithree.js",
   "module": "dist/pithree.js",
